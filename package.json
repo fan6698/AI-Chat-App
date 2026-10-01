@@ -13,7 +13,8 @@
     "verify:markdown": "node scripts/verify-markdown.mjs",
     "verify:streaming": "node scripts/verify-delta-buffer.mjs",
     "verify:proxy": "node scripts/verify-proxy.mjs",
-    "verify": "npm run verify:api && npm run verify:storage && npm run verify:markdown && npm run verify:streaming && npm run verify:proxy"
+    "verify:edgeone": "node scripts/verify-edgeone-proxy.mjs",
+    "verify": "npm run verify:api && npm run verify:storage && npm run verify:markdown && npm run verify:streaming && npm run verify:proxy && npm run verify:edgeone"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

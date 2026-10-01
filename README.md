@@ -160,15 +160,47 @@ npm run build     # 确认构建通过
    - 在页面上右键"查看源代码"，搜索 Key 的前几位，**应当搜不到**
    - 如果页面提示"服务端未配置 ZHIPU_API_KEY"，说明第 3 步没加上或加了没重新部署
 
+### 部署到腾讯云 EdgeOne Pages（国内推荐）
+
+`vercel.app` 域名在国内经常打不开。EdgeOne Pages 是更合适的选择：支持 GitHub 一键导入、自带后端函数、亚太 2500+ 节点、免费额度充足（函数 300 万次/月）。
+
+项目里已经备好对应函数 `cloud-functions/api/chat.js`（Node.js 运行时），路由就是 `/api/chat`，**前端一行都不用改**。
+
+1. **开通并导入**
+   打开 [EdgeOne 控制台](https://edgeone.cloud.tencent.com/) → Pages → 连接 Git → 选 `fan6698/AI-Chat-App` → 部署。
+
+2. **构建配置**
+
+   | 项 | 值 |
+   | --- | --- |
+   | 框架预设 | Vite |
+   | 构建命令 | `npm run build` |
+   | 输出目录 | `dist` |
+
+3. **配置环境变量**
+   项目设置 → 环境变量，只添加：
+
+   | Name | Value |
+   | --- | --- |
+   | `ZHIPU_API_KEY` | 你的智谱 Key |
+
+   同样**不要**添加 `VITE_ZHIPU_API_KEY`。EdgeOne 的环境变量通过 `context.env` 注入函数，不会进入前端产物。
+
+4. **重新部署**（改环境变量后必做），完成后用平台给的 `*.edgeone.app` 域名访问。
+
+> 注意：`api/chat.ts`（Vercel）与 `cloud-functions/api/chat.js`（EdgeOne）功能等价、签名不同，两平台各用各的。**改动转发逻辑时两边都要同步改。**
+>
+> 默认域名一般无需备案；绑定自己的域名走大陆节点才需要 ICP 备案。
+
 ### 部署到其他平台
 
 | 平台 | 静态前端 | 后端代理 | 说明 |
 | --- | --- | --- | --- |
-| Vercel | ✅ | ✅ `api/` 目录自动识别 | 最省事，海外访问快 |
-| Netlify | ✅ | 需把 `api/chat.ts` 改为 `netlify/functions/` 格式 | 函数写法需微调 |
-| 腾讯云 EdgeOne Pages | ✅ | ✅ 边缘函数 | 国内访问快，需按平台要求改写函数签名 |
+| 腾讯云 EdgeOne Pages | ✅ | ✅ `cloud-functions/` 已备好 | **国内首选**，速度快、免费额度足 |
+| Vercel | ✅ | ✅ `api/` 目录自动识别 | 最省事，但国内常无法访问 |
+| Netlify | ✅ | 需改写为 `netlify/functions/` 格式 | 国内访问同样不稳 |
 | GitHub Pages | ✅ | ❌ 纯静态，无后端 | 只能走直连模式，Key 会暴露，**不建议** |
-| 自建服务器 | ✅ `npm run build` 后的 dist | ✅ 任意 Node 服务 | 最灵活，需自己运维 |
+| 自建服务器（香港/新加坡） | ✅ `dist` | ✅ 任意 Node 服务 | 免备案、最可控，需自己运维 |
 
 若目标平台不支持 Serverless Function，可把 `api/chat.ts` 的逻辑搬到一个最小 Node 服务（Express/Koa）里，前端把 `VITE_CHAT_ENDPOINT` 指向它的完整 URL 即可。
 
