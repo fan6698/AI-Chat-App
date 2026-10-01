@@ -1,0 +1,36 @@
+{
+  "name": "ai-chat-assistant",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "verify:api": "node scripts/verify-api.mjs",
+    "verify:storage": "node scripts/verify-storage.mjs",
+    "verify:markdown": "node scripts/verify-markdown.mjs",
+    "verify:streaming": "node scripts/verify-delta-buffer.mjs",
+    "verify:proxy": "node scripts/verify-proxy.mjs",
+    "verify": "npm run verify:api && npm run verify:storage && npm run verify:markdown && npm run verify:streaming && npm run verify:proxy"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}
